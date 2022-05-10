@@ -18,12 +18,13 @@
         android:textColor="@color/black"
         android:fontFamily="sans-serif-black"
         />
+
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30px"
-        android:src="@drawable/task"/>
+        android:src="@drawable/task" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,22 +63,14 @@
         android:textColor="@color/black"
         android:gravity="center_horizontal"/>
 
+    <androidx.recyclerview.widget.RecyclerView
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Your Task : "
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="30dp"
-        android:textSize="40px"
-        android:textColor="@color/black"/>
-
-    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:id="@+id/spinner"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:entries="@array/task"
-        android:layout_marginLeft="70dp"
-        android:layout_marginRight="20dp"/>
+        android:background="#4CAF50" />
+
+
+
 </LinearLayout>
