@@ -62,28 +62,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="50px"
+        android:layout_margin="10dp"
         android:textColor="@color/black"
         android:gravity="center_horizontal"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Total Tasks : "
-            android:textSize="40px"
-            android:textColor="@color/black"
-            android:fontFamily="@font/signikabold"/>
-        <TextView
-            android:id="@+id/total_task_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#d50000"
-            android:text="0"/>
-    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
 
