@@ -126,17 +126,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void recyclerMethod (List <Task> array) {
-
         // create Adapter
         RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(array, new RecyclerViewAdapter.ClickListener() {
             @Override
             public void onTaskItemClicked(int position) {
+                Toast.makeText(getApplicationContext(), position + " ", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), TaskDetails.class);
                 intent.putExtra("id", array.get(position).getId());
                 startActivity(intent);
             }
         });
-
         // set adapter on recycler view
         mRecyclerView.setAdapter(recyclerViewAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
