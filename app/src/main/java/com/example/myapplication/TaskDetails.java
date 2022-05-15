@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 public class TaskDetails extends AppCompatActivity {
-    TextView mTaskTitle, mTaskBody;
+    TextView mTaskTitle, mTaskBody, mTaskState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,11 +18,16 @@ public class TaskDetails extends AppCompatActivity {
 
         mTaskTitle = findViewById(R.id.text_task_name);
         mTaskBody  = findViewById(R.id.text_task_body);
+        mTaskState = findViewById(R.id.text_task_state);
 
         //Get Value from Intent
         Intent intent = getIntent();
-        mTaskTitle.setText(intent.getStringExtra("taskName"));
-        mTaskBody.setText(intent.getStringExtra("taskBody"));
+        long id =  intent.getLongExtra("id", 0);
+        Task task = AppDatabase.getInstance(this).taskDao().getTask(id);
+
+        mTaskTitle.setText(task.getTitle());
+        mTaskBody.setText(task.getBody());
+        mTaskState.setText(task.getState());
 
         // Add Back Button in ActionBar
         ActionBar actionBar = getSupportActionBar();

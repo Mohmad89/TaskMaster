@@ -49,3 +49,30 @@ ___
 ![Task Details](screenshots/detailsPage.png)
 
 ___
+
+## Lab 29
+
+* in this lab i will to continuo work on Task Mater Tepo to add some features to the myApp :  
+    1. the user can add the task add descreption then display it in the RecyclerView inside home page.
+    2. when the user click on any item inside RecyclerView will move to the taskDetails page and will see the name and body, statu fro this task.
+* in this Lab I use the Room library to store data in my local storage and retrive it from the Room database
+
+## AddTask page
+
+* in this page the user can add the task and description for it then click submit
+
+![addTask Page](screenshots/AddTask_Lab29.png)
+
+## Home Page With RecyclerView For All Tasks That The User Add It
+
+* after the user add the task, it will add inside RecyclerView in Home Page.
+
+![Home Page](screenshots/home_Lab29.png)
+
+## Task Details Page
+
+* When the user click on any item inside RecyclerView will move to another page to display the title and description, state for this item.
+
+![taskDetails Page](screenshots/taskDetails_Lab29.png)
+
+___
