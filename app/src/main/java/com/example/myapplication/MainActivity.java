@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,15 +21,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    private Button mAddTask, mAllTask, mTask1, mTask2, mTask3;
+    private Button mAddTask, mAllTask;
     private TextView mTextUsername;
     private Spinner mSpinner;
     private RecyclerView mRecyclerView;
+
+    List<Task> arrayFromRoom;
+
 
 
     // Add Task Click To move For AddTask Page
@@ -59,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         mAllTask = findViewById(R.id.all_task);
         mTextUsername = findViewById(R.id.text_username);
         mRecyclerView = findViewById(R.id.recycler_view);
-//        mSpinner = findViewById(R.id.spinner);
+
 
         ArrayList<Task> arrayList = new ArrayList<>();
         arrayList.add(new Task ("Task1", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "new"));
@@ -67,62 +73,13 @@ public class MainActivity extends AppCompatActivity {
         arrayList.add(new Task ("Task3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "In progress"));
         arrayList.add(new Task ("Task4", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "complete"));
 
-        // create Adapter
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(arrayList, new RecyclerViewAdapter.ClickListener() {
-            @Override
-            public void onTaskItemClicked(int position) {
-                Intent intent = new Intent(getApplicationContext(), TaskDetails.class);
-                intent.putExtra("taskName", arrayList.get(position).getTitle());
-                intent.putExtra("taskBody", arrayList.get(position).getBody());
-                startActivity(intent);
-            }
-        });
+        arrayFromRoom = AppDatabase.getInstance(this).taskDao().getAllTasks();
 
-        // set adapter on recycler view
-        mRecyclerView.setAdapter(recyclerViewAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        //set other important properties
-
-
-
-
-
+        recyclerMethod(arrayFromRoom);
 
         mAddTask.setOnClickListener(mAddTaskClick);
         mAllTask.setOnClickListener(mAllTaskClick);
 
-
-
-
-//        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//                String selectedItem = adapterView.getItemAtPosition(i).toString();
-//                Intent intent = new Intent(getApplicationContext(), TaskDetails.class);
-//                switch (selectedItem){
-//                    case "FrontEnd Task" :
-//                        intent.putExtra("task", "FrontEnd Task");
-//                        startActivity(intent);
-//                        break;
-//                    case "BackEnd Task" :
-//                        intent.putExtra("task", "BackEnd Task");
-//                        startActivity(intent);
-//                        break;
-//                    case "Database Task" :
-//                        intent.putExtra("task", "Database Task");
-//                        startActivity(intent);
-//                        break;
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
 
         // Add Back Button in ActionBar
         ActionBar actionBar = getSupportActionBar();
@@ -159,10 +116,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         setUsername();
+        List <Task> array = AppDatabase.getInstance(getApplicationContext()).taskDao().getAllTasks();
+        recyclerMethod(array);
     }
 
     private void setUsername () {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mTextUsername.setText(sharedPreferences.getString("username", "No User Name Yet"));
+    }
+
+    public void recyclerMethod (List <Task> array) {
+
+        // create Adapter
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(array, new RecyclerViewAdapter.ClickListener() {
+            @Override
+            public void onTaskItemClicked(int position) {
+                Intent intent = new Intent(getApplicationContext(), TaskDetails.class);
+                intent.putExtra("id", array.get(position).getId());
+                startActivity(intent);
+            }
+        });
+
+        // set adapter on recycler view
+        mRecyclerView.setAdapter(recyclerViewAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //set other important properties
     }
 }

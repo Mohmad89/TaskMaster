@@ -1,6 +1,14 @@
 package com.example.myapplication;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+
+@Entity
 public class Task {
+
+    @PrimaryKey (autoGenerate = true)
+    private long id;
 
     private String title;
     private String body;
@@ -34,5 +42,13 @@ public class Task {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
