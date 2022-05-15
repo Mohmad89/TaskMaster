@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private Button mAddTask, mAllTask;
-    private TextView mTextUsername;
+    private TextView mTextUsername, mTotalTask;
     private Spinner mSpinner;
     private RecyclerView mRecyclerView;
 
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         mAllTask = findViewById(R.id.all_task);
         mTextUsername = findViewById(R.id.text_username);
         mRecyclerView = findViewById(R.id.recycler_view);
+        mTotalTask = findViewById(R.id.total_task);
 
 
         ArrayList<Task> arrayList = new ArrayList<>();
@@ -79,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
         mAddTask.setOnClickListener(mAddTaskClick);
         mAllTask.setOnClickListener(mAllTaskClick);
-
 
         // Add Back Button in ActionBar
         ActionBar actionBar = getSupportActionBar();

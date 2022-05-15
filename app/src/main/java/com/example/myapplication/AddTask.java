@@ -8,8 +8,10 @@ import androidx.room.Room;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,8 @@ public class AddTask extends AppCompatActivity {
     TextView mTotalTask;
     EditText mTaskName, mTaskDescription;
     Button mAddTask;
+    Spinner mSpinnerState;
+    String state = "";
 
     View.OnClickListener mAddTaskClick = new View.OnClickListener() {
         @Override
@@ -31,7 +35,7 @@ public class AddTask extends AppCompatActivity {
             String taskDesc = mTaskDescription.getText().toString();
 
             // Task Instance
-            Task task = new Task(taskName, taskDesc, "new");
+            Task task = new Task(taskName, taskDesc, state);
 
             // Save task object inside AppDatabase (RoomDatabase)
             AppDatabase.getInstance(getApplicationContext()).taskDao().insertAll(task);
@@ -47,6 +51,36 @@ public class AddTask extends AppCompatActivity {
         mTaskName = findViewById(R.id.task_name);
         mTaskDescription = findViewById(R.id.task_description);
         mTotalTask = findViewById(R.id.total_task);
+        mSpinnerState = findViewById(R.id.spinner);
+
+        mSpinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+
+                String selectedItem = adapterView.getItemAtPosition(position).toString();
+                switch (selectedItem) {
+                    case "New" :
+                        state = "New";
+                        break;
+                    case "Submitted":
+                        state = "Submitted";
+                        break;
+                    case "InProgress":
+                        state = "InProgress";
+                        break;
+                    case "Completed":
+                        state = "Completed";
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
 
         mAddTask.setOnClickListener(mAddTaskClick);
 

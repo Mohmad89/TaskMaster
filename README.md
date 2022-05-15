@@ -76,3 +76,8 @@ ___
 ![taskDetails Page](screenshots/taskDetails_Lab29.png)
 
 ___
+
+## Lab 31 
+
+* in this lab i do some Test Function to my TaskMaster App with use Espresso Library 
+* I add spinner widget to the addTask Page to allow for user to select the state for him task.
