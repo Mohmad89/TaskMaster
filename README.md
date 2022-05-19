@@ -85,3 +85,9 @@ ___
 ![AddTask Page](screenshots/AddTask_Lab31.png)
 
 ___
+ 
+## Lab32 
+
+* in this lab I'm connect my App with dynamodb
+* i fitch all data inside dynamodb with API
+* do sync between API and DataStore.

@@ -2,12 +2,12 @@ package com.example.myapplication;
 
 import android.content.Context;
 
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+
+import com.example.myapplication.ui.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;

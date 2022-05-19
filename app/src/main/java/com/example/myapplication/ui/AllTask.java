@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,6 +6,8 @@ import androidx.appcompat.app.ActionBar;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import com.example.myapplication.R;
 
 public class AllTask extends AppCompatActivity {
 
