@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -8,6 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.example.myapplication.AppDatabase;
+import com.example.myapplication.R;
+import com.example.myapplication.Task;
 
 public class TaskDetails extends AppCompatActivity {
     TextView mTaskTitle, mTaskBody, mTaskState;
