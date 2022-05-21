@@ -11,8 +11,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
@@ -22,6 +25,9 @@ public class Setting extends AppCompatActivity {
     public final String USERNAME = "username";
     private Button mBtnCreate;
     private EditText mEditUsername;
+    private Spinner mTeamSpinner;
+    private String teamTitle;
+
 
     private View.OnClickListener clickCreateUsername = new View.OnClickListener() {
         @Override
@@ -33,8 +39,6 @@ public class Setting extends AppCompatActivity {
                 saveUsername();
             }
 
-
-            // to back for last activity
             Setting.this.finish();
 
         }
@@ -44,8 +48,34 @@ public class Setting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+        // Inflate
         mBtnCreate = findViewById(R.id.create_username);
         mEditUsername = findViewById(R.id.edit_username);
+        mTeamSpinner = findViewById(R.id.team_spinner);
+
+
+        mTeamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                String selectedItem = adapterView.getItemAtPosition(position).toString();
+                switch (selectedItem){
+                    case "Team1":
+                        teamTitle = "Team1";
+                        break;
+                    case "Team2" :
+                        teamTitle = "Team2";
+                        break;
+                    case "Team3" :
+                        teamTitle = "Team3";
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         mBtnCreate.setOnClickListener(clickCreateUsername);
 
@@ -97,6 +127,7 @@ public class Setting extends AppCompatActivity {
 
         // save the text
         preferenceEditor.putString("username", username);
+        preferenceEditor.putString("teamTitle", teamTitle);
         preferenceEditor.apply();
 
         Toast.makeText(this, "Username Has Been Created", Toast.LENGTH_SHORT).show();

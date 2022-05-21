@@ -26,12 +26,15 @@ public class TaskDetails extends AppCompatActivity {
 
         //Get Value from Intent
         Intent intent = getIntent();
-        long id =  intent.getLongExtra("id", 0);
-        Task task = AppDatabase.getInstance(this).taskDao().getTask(id);
+        String title =  intent.getStringExtra("title");
+        String description = intent.getStringExtra("description");
+        String state = intent.getStringExtra("state");
 
-        mTaskTitle.setText(task.getTitle());
-        mTaskBody.setText(task.getBody());
-        mTaskState.setText(task.getState());
+//        Task task = AppDatabase.getInstance(this).taskDao().getTask(id);
+
+        mTaskTitle.setText(title);
+        mTaskBody.setText(description);
+        mTaskState.setText(state);
 
         // Add Back Button in ActionBar
         ActionBar actionBar = getSupportActionBar();
