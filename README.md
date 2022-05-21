@@ -91,3 +91,29 @@ ___
 * in this lab I'm connect my App with dynamodb
 * i fitch all data inside dynamodb with API
 * do sync between API and DataStore.
+
+___ 
+
+## Lab33 
+
+* in this lab i will continuo work on TaskMaster Repo to do some features these features is :
+    1. when the user add a Task he can to select any team he want to put him task inside it 
+    2. in the setinng page the user can select any teams he want to display it inside MainActivity .
+
+## AddTask Activity
+
+![](screenshots/addTask_lab33.png)
+
+___
+
+## Home Activity
+
+![](screenshots/main_lab33.png)
+
+___
+
+## Setting Activity
+
+![](screenshots/setting_lab33.png)
+
+___

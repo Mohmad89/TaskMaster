@@ -13,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.Espresso.pressBack;
@@ -22,7 +23,10 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.IsAnything.anything;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
@@ -76,6 +80,20 @@ public class MyAppEspressoTest {
         onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.text_task_name)).check(matches(withText(task)));
 
+    }
+
+    @Test
+    public void selectTeam() {
+        String team = "Team2";
+        String username = "mohm";
+        openActionBarOverflowOrOptionsMenu(mainActivity.getActivity());
+        onView(withText("Setting")).perform(click());
+        onView(withId(R.id.edit_username)).perform(typeText(username), closeSoftKeyboard());
+        onView(withId(R.id.team_spinner)).perform(click());
+        onData(anything()).atPosition(1).perform(click());
+        onView(withId(R.id.team_spinner)).check(matches(withSpinnerText(containsString(team))));
+        onView(withId(R.id.create_username)).perform(click());
+        onView(withId(R.id.text_team)).check(matches(withText(team)));
     }
 
 }

@@ -66,6 +66,15 @@
         android:textColor="@color/black"
         android:gravity="center_horizontal"/>
 
+    <TextView
+        android:id="@+id/text_team"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="50px"
+        android:layout_margin="10dp"
+        android:textColor="@color/black"
+        android:gravity="center_horizontal"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
 
