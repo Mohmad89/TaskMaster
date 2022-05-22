@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextUsername, mTotalTask;
     private Spinner mSpinner;
     private RecyclerView mRecyclerView;
+    
+    private Handler handler;
 
     // List<Task> arrayFromRoom;
 
@@ -100,8 +102,14 @@ public class MainActivity extends AppCompatActivity {
 
                     for (Task task : success.getData()) {
 
-//                        com.example.myapplication.Task newTask = new com.example.myapplication.Task(task.getTitle(), task.getBody(), task.getState());
                         apiListArray.add(new com.example.myapplication.Task(task.getTitle(), task.getBody(), task.getState()));
+                        Bundle bundle = new Bundle();
+                                bundle.putString("true", "true");
+
+                                Message message = new Message();
+                                message.setData(bundle);
+
+                                handler.sendMessage(message);
                     }
                     Log.i(TAG, "success " );
                 },
@@ -122,6 +130,12 @@ public class MainActivity extends AppCompatActivity {
                 failure -> Log.e("Tutorial", "Observation failed.", failure),
                 () -> Log.i("Tutorial", "Observation complete.")
         );
+        
+        // Handler
+        handler = new Handler(Looper.getMainLooper(), msg -> {
+            recyclerMethod(arrayList);
+            return true;
+        });
         // Add Back Button in ActionBar
         ActionBar actionBar = getSupportActionBar();
         // showing the back button in action bar
