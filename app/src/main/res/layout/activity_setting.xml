@@ -20,10 +20,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Enter Username"
-        android:textColor="@color/black"
+        android:fontFamily="sans-serif-black"
         android:textSize="50px"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
 
         />
 
@@ -34,7 +33,7 @@
         android:layout_height="wrap_content"
         android:hint="username"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:startIconDrawable="@android:drawable/btn_star_big_on"
+        app:startIconDrawable="@drawable/profile"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="10dp"
@@ -54,40 +53,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select Team"
-        android:textColor="@color/black"
+        android:fontFamily="sans-serif-black"
         android:textSize="50px"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
 
         />
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:layout_marginTop="10dp"
-        android:id="@+id/team_spinner"
-        android:layout_width="200dp"
+
+    <com.google.android.material.textfield.TextInputLayout
+        app:startIconDrawable="@drawable/group"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/team"
         android:layout_marginLeft="30dp"
-        android:layout_marginRight="20dp"/>
-<!--    <com.google.android.material.textfield.TextInputLayout-->
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:hint="select team"
+        >
 
-<!--        app:startIconDrawable="@android:drawable/btn_star_big_on"-->
-<!--        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginLeft="30dp"-->
-<!--        android:layout_marginRight="30dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        >-->
+        <AutoCompleteTextView
+            android:id="@+id/auto_completed_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:drawablePadding="5dp"
+            />
 
-<!--        <AutoCompleteTextView-->
-<!--            android:id="@+id/team_spinner"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:inputType="none"-->
-<!--            android:drawablePadding="5dp"-->
-<!--            />-->
-
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/create_username"

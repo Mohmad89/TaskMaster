@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.myapplication.AppDatabase;
 import com.example.myapplication.R;
-import com.example.myapplication.Task;
 
 public class TaskDetails extends AppCompatActivity {
     TextView mTaskTitle, mTaskBody, mTaskState;

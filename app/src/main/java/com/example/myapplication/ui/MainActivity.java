@@ -13,29 +13,24 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
-import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
-import com.example.myapplication.AppDatabase;
 import com.example.myapplication.R;
-import com.example.myapplication.RecyclerViewAdapter;
+import com.example.myapplication.Adapter.RecyclerViewAdapter;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mAddTask, mAllTask;
     private TextView mTextUsername, mTextTeam;
-    private Spinner mSpinner;
     private RecyclerView mRecyclerView;
     private Handler handler;
 
@@ -91,11 +85,11 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "Could not initialize Amplify", error);
         }
 
-//        List<com.example.myapplication.Task> arrayList = new ArrayList<>();
-//        arrayList.add(new com.example.myapplication.Task("Task1", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "new"));
-//        arrayList.add(new com.example.myapplication.Task ("Task2", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "assigned"));
-//        arrayList.add(new com.example.myapplication.Task ("Task3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "In progress"));
-//        arrayList.add(new com.example.myapplication.Task ("Task4", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "complete"));
+//        List<com.example.myapplication.data.Task> arrayList = new ArrayList<>();
+//        arrayList.add(new com.example.myapplication.data.Task("Task1", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "new"));
+//        arrayList.add(new com.example.myapplication.data.Task ("Task2", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "assigned"));
+//        arrayList.add(new com.example.myapplication.data.Task ("Task3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "In progress"));
+//        arrayList.add(new com.example.myapplication.data.Task ("Task4", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "complete"));
 
 //        arrayFromRoom = AppDatabase.getInstance(this).taskDao().getAllTasks();
 
@@ -176,11 +170,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void displayAllTeam(String teamTitle){
-        List<com.example.myapplication.Task> apiListArray = new ArrayList<>();
+        List<com.example.myapplication.data.Task> apiListArray = new ArrayList<>();
         Amplify.API.query(ModelQuery.list(Task.class),
                 success -> {
                     for (Task task : success.getData()) {
-                        apiListArray.add(new com.example.myapplication.Task(task.getTitle(), task.getBody(), task.getState()));
+                        apiListArray.add(new com.example.myapplication.data.Task(task.getTitle(), task.getBody(), task.getState()));
                     }
                     Bundle bundle = new Bundle();
                     bundle.putString("true", "true");
@@ -204,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void displaySelectedTeam(String teamTitle){
 
-        ArrayList<com.example.myapplication.Task> arrayList = new ArrayList<>();
+        ArrayList<com.example.myapplication.data.Task> arrayList = new ArrayList<>();
         final String[] id = new String[1];
         Amplify.API.query(ModelQuery
                 .list(Team.class, Team.TITLE.eq(teamTitle)),
@@ -218,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                             Task.TEAM_TASKS_ID.eq(id[0])),
                             success -> {
                                 for (Task task : success.getData()){
-                                    arrayList.add(new com.example.myapplication.Task(task.getTitle(), task.getBody(), task.getState()));
+                                    arrayList.add(new com.example.myapplication.data.Task(task.getTitle(), task.getBody(), task.getState()));
                                 }
                                 Bundle bundle = new Bundle();
                                 bundle.putString("true", "true");
@@ -246,14 +240,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void recyclerMethod (List <com.example.myapplication.Task> array) {
+    public void recyclerMethod (List <com.example.myapplication.data.Task> array) {
         // create Adapter
         RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(array, new RecyclerViewAdapter.ClickListener() {
             @Override
             public void onTaskItemClicked(int position) {
                 Toast.makeText(getApplicationContext(), position + " ", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), TaskDetails.class);
-                intent.putExtra("name", array.get(position).getTitle());
+                intent.putExtra("title", array.get(position).getTitle());
                 intent.putExtra("description", array.get(position).getBody());
                 intent.putExtra("state", array.get(position).getState());
                 startActivity(intent);
@@ -265,4 +259,7 @@ public class MainActivity extends AppCompatActivity {
 
         //set other important properties
     }
+
+
+
 }

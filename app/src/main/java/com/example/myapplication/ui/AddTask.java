@@ -13,23 +13,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
-import com.example.myapplication.AppDatabase;
 import com.example.myapplication.R;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AddTask extends AppCompatActivity {
 
@@ -37,9 +35,13 @@ public class AddTask extends AppCompatActivity {
     private TextView mTotalTask;
     private EditText mTaskName, mTaskDescription;
     private Button mAddTask;
-    private Spinner mSpinnerState, mSpinnerTeam;
+    private AutoCompleteTextView mAutoCompletedState, mAutoCompletedTeam;
     private String state, teamTitle;
     private Handler handler;
+
+    private String [] teamItem = {"Team1", "Team2", "Team3"};
+    private String [] stateItem = {"New", "Submitted", "InProgress", "Completed"};
+    private ArrayAdapter<String> adapterTeam, adapterState;
 
 
 
@@ -95,6 +97,9 @@ public class AddTask extends AppCompatActivity {
                         Log.e(TAG, "Error ", error );
                     }
             );
+
+            mTaskName.setText("");
+            mTaskDescription.setText("");
         }
     };
 
@@ -108,14 +113,20 @@ public class AddTask extends AppCompatActivity {
         mTaskName = findViewById(R.id.task_name);
         mTaskDescription = findViewById(R.id.task_description);
         mTotalTask = findViewById(R.id.total_task);
-        mSpinnerState = findViewById(R.id.spinner);
-        mSpinnerTeam = findViewById(R.id.team_spinner);
+        mAutoCompletedState = findViewById(R.id.spinner);
+        mAutoCompletedTeam = findViewById(R.id.team_spinner);
+
+        adapterTeam = new ArrayAdapter<>(this, R.layout.list_item, teamItem);
+        mAutoCompletedTeam.setAdapter(adapterTeam);
+
+        adapterState = new ArrayAdapter<>(this, R.layout.list_item, stateItem);
+        mAutoCompletedState.setAdapter(adapterState);
 
 
         //state spinner
-        mSpinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mAutoCompletedState.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
                 String selectedItem = adapterView.getItemAtPosition(position).toString();
                 switch (selectedItem) {
@@ -132,11 +143,6 @@ public class AddTask extends AppCompatActivity {
                         state = "Completed";
                         break;
                 }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 
@@ -160,9 +166,9 @@ public class AddTask extends AppCompatActivity {
                 });
 
         // Team Spinner
-        mSpinnerTeam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mAutoCompletedTeam.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String itemSelected = parent.getItemAtPosition(position).toString();
 
                 switch (itemSelected){
@@ -178,15 +184,14 @@ public class AddTask extends AppCompatActivity {
                 }
 
             }
-            @Override
-            public void onNothingSelected(AdapterView <?> parent) {
-            }
+
         });
 
 
         mAddTask.setOnClickListener(mAddTaskClick);
 
 //        List<Task> totalTask = AppDatabase.getInstance(this).taskDao().getAllTasks();
+
         mTotalTask.setText("");
 
         // Handler
@@ -216,10 +221,10 @@ public class AddTask extends AppCompatActivity {
     public void teamSpinner (ArrayList<String> array) {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerTeam.setAdapter(arrayAdapter);
-        mSpinnerTeam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mAutoCompletedTeam.setAdapter(arrayAdapter);
+        mAutoCompletedTeam.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
                 switch (selectedItem){
@@ -234,9 +239,6 @@ public class AddTask extends AppCompatActivity {
                         break;
                 }
 
-            }
-            @Override
-            public void onNothingSelected(AdapterView <?> parent) {
             }
         });
     }
