@@ -100,20 +100,20 @@ ___
     1. when the user add a Task he can to select any team he want to put him task inside it 
     2. in the setinng page the user can select any teams he want to display it inside MainActivity .
 
-## AddTask Activity
+## Home Activity
 
-![](screenshots/addTask_lab33.png)
+![](screenshots/home1.png)
 
 ___
 
-## Home Activity
+## AddTask Activity
 
-![](screenshots/main_lab33.png)
+![](screenshots/addTask1.png)
 
 ___
 
 ## Setting Activity
 
-![](screenshots/setting_lab33.png)
+![](screenshots/setting1.png)
 
 ___

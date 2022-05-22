@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,13 +29,17 @@ public class Setting extends AppCompatActivity {
     private Spinner mTeamSpinner;
     private String teamTitle;
 
+    String [] items = {"Team1", "Team2", "Team3"};
+    AutoCompleteTextView autoCompleteTextView;
+    ArrayAdapter<String> adapterItem;
+
 
     private View.OnClickListener clickCreateUsername = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
 
             if (mEditUsername.getText().toString().length() > 10){
-                Toast.makeText(Setting.this, "Username must be less than 10 charecter", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Setting.this, "Username must be less than 10 character", Toast.LENGTH_SHORT).show();
             } else {
                 saveUsername();
             }
@@ -51,12 +56,15 @@ public class Setting extends AppCompatActivity {
         // Inflate
         mBtnCreate = findViewById(R.id.create_username);
         mEditUsername = findViewById(R.id.edit_username);
-        mTeamSpinner = findViewById(R.id.team_spinner);
+        autoCompleteTextView = findViewById(R.id.auto_completed_text);
 
+        adapterItem = new ArrayAdapter<>(this, R.layout.list_item, items);
 
-        mTeamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        autoCompleteTextView.setAdapter(adapterItem);
+
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String selectedItem = adapterView.getItemAtPosition(position).toString();
                 switch (selectedItem){
                     case "Team1":
@@ -70,12 +78,8 @@ public class Setting extends AppCompatActivity {
                         break;
                 }
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
         });
+
 
         mBtnCreate.setOnClickListener(clickCreateUsername);
 
