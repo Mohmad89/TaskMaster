@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -80,9 +79,7 @@ public class MainActivity extends AppCompatActivity {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSDataStorePlugin());
             Amplify.configure(getApplicationContext());
-            Log.i(TAG, "Initialized Amplify");
         } catch (AmplifyException error) {
-            Log.e(TAG, "Could not initialize Amplify", error);
         }
 
 //        List<com.example.myapplication.data.Task> arrayList = new ArrayList<>();
@@ -135,10 +132,10 @@ public class MainActivity extends AppCompatActivity {
     public void DataStoreSync () {
         // syncs the local DataStore with the backend when changes to the local DataStore are detected
         Amplify.DataStore.observe(Task.class,
-                started -> Log.i("Tutorial", "Observation began."),
-                change -> Log.i("Tutorial", change.item().toString()),
-                failure -> Log.e("Tutorial", "Observation failed.", failure),
-                () -> Log.i("Tutorial", "Observation complete.")
+                started ->{},
+                change -> {},
+                failure -> {},
+                () -> {}
         );
     }
 
@@ -183,8 +180,7 @@ public class MainActivity extends AppCompatActivity {
                     message.setData(bundle);
 
                     handler.sendMessage(message);
-                },
-                failure -> Log.i(TAG, "failure " + failure)
+                }, error -> {}
         );
         // Handler
         handler = new Handler(Looper.getMainLooper(), msg -> {
@@ -206,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
                     for (Team team: teamSuccess.getData()){
                         id[0] = team.getId();
                     }
-                    Log.i(TAG, "displaySelectedTeam: "+ id[0]);
                     Amplify.API.query(ModelQuery.list(
                             Task.class,
                             Task.TEAM_TASKS_ID.eq(id[0])),
@@ -223,12 +218,10 @@ public class MainActivity extends AppCompatActivity {
                                 handler.sendMessage(message);
                             },
                             error -> {
-                                Log.e(TAG, "Error: ", error);
                             });
 
                 },
                 error -> {
-                    Log.e(TAG, "displaySelectedTeam: ",error );
                 });
         // Handler
         handler = new Handler(Looper.getMainLooper(), msg -> {

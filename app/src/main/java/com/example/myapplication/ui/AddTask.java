@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -76,25 +75,19 @@ public class AddTask extends AppCompatActivity {
                                 Amplify.DataStore.save(
                                         newTask,
                                         success -> {
-                                            Log.i(TAG, "We were successful => " + success);
                                         },
                                         error -> {
-                                            Log.e(TAG, "We got an error => " + error);
                                         });
 
                                 // Save to the backend
                                 Amplify.API.mutate(ModelMutation.create(newTask),
                                         success -> {
-                                            Log.i(TAG, "We were successful => " + success);
                                         },
                                         error -> {
-                                            Log.e(TAG, "We got an error => " + error);
                                         });
                             }
-                            Log.i(TAG, "The Task has been added");
                     },
                     error -> {
-                        Log.e(TAG, "Error ", error );
                     }
             );
 
@@ -162,7 +155,6 @@ public class AddTask extends AppCompatActivity {
                     handler.sendMessage(message);
                 },
                 error ->{
-                    Log.e(TAG, "Error to Fitch Data From API",error );
                 });
 
         // Team Spinner

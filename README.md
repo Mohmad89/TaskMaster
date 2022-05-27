@@ -117,3 +117,12 @@ ___
 ![](screenshots/setting1.png)
 
 ___
+
+## LAB 34 
+
+* In this lab i do some steps to prepare my App for release these steps is  :
+    - Remove all log calls.
+    - Remove android:debuggable from mainefest file.
+    - Generate Signed Bundle / APK.
+    - Transfer the APK file to the App root Folder.
+    - [APK File](app-release.apk)
