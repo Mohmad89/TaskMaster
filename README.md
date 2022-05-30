@@ -126,3 +126,36 @@ ___
     - Generate Signed Bundle / APK.
     - Transfer the APK file to the App root Folder.
     - [APK File](app-release.apk)
+
+___
+
+## LAB 36
+
+* in this lab i will to continuo work on Task Mater Tepo to add some features to the myApp : 
+    1. user can rejister to enter the app .
+    2. after the user do signup he will Verify your email from code number.
+    3. then user can login and logout to my App.
+
+## Login Activity
+
+![](screenshots/login.png)
+
+___
+
+## SignUp Activity 
+
+![](screenshots/signup.png)
+
+___
+
+## Verify Activity
+
+![](screenshots/verify.png)
+
+___
+
+## Logout Button 
+
+![](screenshots/logout.png)
+
+___
