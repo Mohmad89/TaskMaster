@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
@@ -75,12 +77,8 @@ public class MainActivity extends AppCompatActivity {
         mTextTeam = findViewById(R.id.text_team);
 
         // Initialize Amplify
-        try {
-            Amplify.addPlugin(new AWSApiPlugin());
-            Amplify.addPlugin(new AWSDataStorePlugin());
-            Amplify.configure(getApplicationContext());
-        } catch (AmplifyException error) {
-        }
+        
+
 
 //        List<com.example.myapplication.data.Task> arrayList = new ArrayList<>();
 //        arrayList.add(new com.example.myapplication.data.Task("Task1", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "new"));
@@ -98,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             displayAllTeam(teamTitle);
         }
+
 
         mAddTask.setOnClickListener(mAddTaskClick);
         mAllTask.setOnClickListener(mAllTaskClick);
@@ -124,9 +123,30 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_setting:
                 menuToSetting();
                 return true;
+            case R.id.action_logout:
+                logout();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void logout() {
+        Amplify.Auth.signOut(
+                ()-> {
+                    startActivity(new Intent(MainActivity.this, Login.class));
+                    authSession("logout");
+                    finish();
+                },
+                error ->{
+
+                });
+    }
+
+    private void authSession (String method){
+        Amplify.Auth.fetchAuthSession(
+                result ->{},
+                error->{});
     }
 
     public void DataStoreSync () {
@@ -148,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         setUsername();
-        Toast.makeText(this, "OnResume", Toast.LENGTH_SHORT).show();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String teamTitle = sharedPreferences.getString("teamTitle", "All Team");
@@ -162,8 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUsername () {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mTextUsername.setText(sharedPreferences.getString("username", "No User Name Yet"));
-
+        mTextUsername.setText(sharedPreferences.getString("username",""));
     }
 
     public void displayAllTeam(String teamTitle){
@@ -218,11 +236,14 @@ public class MainActivity extends AppCompatActivity {
                                 handler.sendMessage(message);
                             },
                             error -> {
+                                Log.e(TAG, "error ", error);
                             });
 
                 },
                 error -> {
+                    Log.e(TAG, "error ", error);
                 });
+        
         // Handler
         handler = new Handler(Looper.getMainLooper(), msg -> {
             String text = msg.getData().getString("true");
