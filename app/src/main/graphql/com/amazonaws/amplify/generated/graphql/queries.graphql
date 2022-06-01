@@ -5,6 +5,7 @@ query GetTask($id: ID!) {
     title
     body
     state
+    imageKey
     createdAt
     updatedAt
     _version
@@ -24,6 +25,7 @@ query ListTasks(
       title
       body
       state
+      imageKey
       createdAt
       updatedAt
       _version
@@ -52,6 +54,7 @@ query SyncTasks(
       title
       body
       state
+      imageKey
       createdAt
       updatedAt
       _version
@@ -73,6 +76,7 @@ query GetTeam($id: ID!) {
         title
         body
         state
+        imageKey
         createdAt
         updatedAt
         _version

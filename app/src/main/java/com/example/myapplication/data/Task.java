@@ -13,12 +13,13 @@ public class Task {
     private String title;
     private String body;
     private String state;
+    private String imageKey;
 
-    public Task(String title, String body, String state) {
+    public Task(String title, String body, String state, String imageKey) {
         this.title = title;
         this.body = body;
-
         this.state = state;
+        this.imageKey = imageKey;
     }
 
     public String getTitle() {
@@ -43,6 +44,14 @@ public class Task {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getImageKey() {
+        return imageKey;
+    }
+
+    public void setImageKey(String imageKey) {
+        this.imageKey = imageKey;
     }
 
     public long getId() {
