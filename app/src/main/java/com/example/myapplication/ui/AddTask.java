@@ -1,13 +1,23 @@
 package com.example.myapplication.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,17 +35,28 @@ import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 import com.example.myapplication.R;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AddTask extends AppCompatActivity {
 
     private static final String TAG = AddTask.class.getSimpleName();
+    public static final int REQUEST_CODE = 123;
     private TextView mTotalTask;
     private EditText mTaskName, mTaskDescription;
-    private Button mAddTask;
+    private Button mAddTask, mUploadBtn;
     private AutoCompleteTextView mAutoCompletedState, mAutoCompletedTeam;
-    private String state, teamTitle;
+    private String state, teamTitle, imageKey;
     private Handler handler;
 
     private String [] teamItem = {"Team1", "Team2", "Team3"};
@@ -69,6 +90,7 @@ public class AddTask extends AppCompatActivity {
                                         .title(taskName)
                                         .body(taskDesc)
                                         .state(state)
+                                        .imageKey(imageKey)
                                         .teamTasksId(team.getId())
                                         .build(); // we must to write it to build the object
 
@@ -108,6 +130,7 @@ public class AddTask extends AppCompatActivity {
         mTotalTask = findViewById(R.id.total_task);
         mAutoCompletedState = findViewById(R.id.spinner);
         mAutoCompletedTeam = findViewById(R.id.team_spinner);
+        mUploadBtn = findViewById(R.id.btn_upload);
 
         adapterTeam = new ArrayAdapter<>(this, R.layout.list_item, teamItem);
         mAutoCompletedTeam.setAdapter(adapterTeam);
@@ -115,6 +138,9 @@ public class AddTask extends AppCompatActivity {
         adapterState = new ArrayAdapter<>(this, R.layout.list_item, stateItem);
         mAutoCompletedState.setAdapter(adapterState);
 
+        mUploadBtn.setOnClickListener(view ->{
+            imageUpload();
+        });
 
         //state spinner
         mAutoCompletedState.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -157,7 +183,7 @@ public class AddTask extends AppCompatActivity {
                 error ->{
                 });
 
-        // Team Spinner
+
         mAutoCompletedTeam.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -178,7 +204,6 @@ public class AddTask extends AppCompatActivity {
             }
 
         });
-
 
         mAddTask.setOnClickListener(mAddTaskClick);
 
@@ -233,5 +258,85 @@ public class AddTask extends AppCompatActivity {
 
             }
         });
+    }
+
+
+
+    public void imageUpload() {
+        // Launches photo picker in single-select mode.
+        // This means that the user can select one photo or video.
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != Activity.RESULT_OK) {
+            // Handler error
+            Log.e(TAG, "onActivityResult: Error getting image from device");
+        }
+        switch (requestCode) {
+            case REQUEST_CODE:
+                // Get photo picker response for single select.
+                Uri currentUri = data.getData();
+                // Do stuff with the photo/video URI
+                Log.i(TAG, "onActivityResult: the uri is => " + currentUri);
+
+                try {
+                    Bitmap bitmapImage = getBitmapFromUri(currentUri);
+
+                    // Convert Bitmap to File
+                    File file = new File(getApplicationContext().getFilesDir(), "image.jpg");
+                    OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
+                    bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                    os.close();
+
+                    // upload file to s3
+                    imageKey = UUID.randomUUID().toString();
+                    Amplify.Storage.uploadFile(
+                            imageKey + ".jpg",
+                            file,
+                            result -> {
+                                Log.i(TAG, "Successfully uploaded: " + result.getKey());
+
+                                Bundle bundle = new Bundle();
+                                bundle.putString("success", "success");
+
+                                Message message = new Message();
+                                message.setData(bundle);
+
+                                handler.sendMessage(message);
+                            },
+                            storageFailure -> Log.e(TAG, "Failed Upload", storageFailure)
+
+                    );
+                    // Handler
+                    handler = new Handler(Looper.getMainLooper(), msg -> {
+                        Drawable img = getApplicationContext().getResources().getDrawable(R.drawable.checkbox);
+                        mUploadBtn.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                        mUploadBtn.setText("Upload is Done");
+                        return true;
+                    });
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return;
+        }
+
+    }
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+
+        return image;
     }
 }

@@ -159,3 +159,27 @@ ___
 ![](screenshots/logout.png)
 
 ___
+
+# Lab 37
+
+* in this lab i will to continuo work on Task Mater Repo to add some features to the myApp :
+    - the user can upload image from his phone when he add a new task.
+    - user can see this image in TaskDetails Activity.
+
+## Add Task Activity
+
+* Before the user upload the image he can see Upload image button with icon(X) drawable
+
+![](screenshots/beforeUploadImage.png)
+
+* After the user upload the image he can see Upload image button with checkBox on icon drawable
+
+![](screenshots/afterUploadImage.png)
+
+___
+
+## TaskDetails Activity
+
+* The user can see the Image Task when he click on any task inside RecyclerView.
+
+![](screenshots/taskDetailsImage.png)

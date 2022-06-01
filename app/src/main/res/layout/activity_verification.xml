@@ -6,13 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.Verification">
+    tools:context=".ui.Verification"
+    android:padding="10dp"
+    >
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="50dp"
-        android:src="@drawable/login"/>
+        android:src="@drawable/verification"/>
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
@@ -22,7 +24,6 @@
         android:layout_marginTop="50dp"
         android:fontFamily="sans-serif-black"
         />
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_marginTop="10dp"

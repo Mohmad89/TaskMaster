@@ -16,6 +16,7 @@ import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
+import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 import com.example.myapplication.R;
 
 public class Login extends AppCompatActivity {
@@ -42,6 +43,7 @@ public class Login extends AppCompatActivity {
 
         // Initialize Amplify
         try {
+            Amplify.addPlugin(new AWSS3StoragePlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSDataStorePlugin());
@@ -78,7 +80,6 @@ public class Login extends AppCompatActivity {
         );
     }
 
-
     private void authSession() {
         Amplify.Auth.fetchAuthSession(
                 result -> {
@@ -87,4 +88,6 @@ public class Login extends AppCompatActivity {
                 error -> Log.e(TAG, "Auth Session Error ", error)
         );
     }
+
+
 }

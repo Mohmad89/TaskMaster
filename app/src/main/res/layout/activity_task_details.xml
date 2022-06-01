@@ -7,10 +7,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.TaskDetails"
     android:background="@drawable/ic_wave__2_"
+    android:padding="10dp"
+    tools:context=".ui.TaskDetails"
     >
 
+    <ImageView
+        android:id="@+id/task_image"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        />
     <TextView
         android:id="@+id/text_task_name"
         android:layout_width="match_parent"
@@ -18,7 +24,7 @@
         android:layout_marginTop="40dp"
         android:textAlignment="center"
         android:gravity="center_horizontal"
-        android:textSize="80px"
+        android:textSize="90px"
         android:text="Title"
         android:textColor="@color/black"
         android:fontFamily="@font/signikabold"
@@ -31,7 +37,7 @@
         android:text="State"
         android:textColor="@color/purple_500"
         android:fontFamily="@font/signikasemibold"
-        android:textSize="50px"
+        android:textSize="60px"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
@@ -43,11 +49,11 @@
         android:layout_height="wrap_content"
         android:text="@string/lorem"
         android:textColor="@color/black"
-        android:textSize="40px"
+        android:textSize="50px"
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:fontFamily="@font/signikalight"
+        android:fontFamily="@font/signikasemibold"
         />
 
 
