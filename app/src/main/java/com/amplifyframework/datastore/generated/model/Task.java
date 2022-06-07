@@ -25,12 +25,16 @@ public final class Task implements Model {
   public static final QueryField BODY = field("Task", "body");
   public static final QueryField STATE = field("Task", "state");
   public static final QueryField IMAGE_KEY = field("Task", "imageKey");
+  public static final QueryField LONGITUDE = field("Task", "longitude");
+  public static final QueryField LATITUDE = field("Task", "latitude");
   public static final QueryField TEAM_TASKS_ID = field("Task", "teamTasksId");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String", isRequired = true) String title;
   private final @ModelField(targetType="String", isRequired = true) String body;
   private final @ModelField(targetType="String", isRequired = true) String state;
   private final @ModelField(targetType="String", isRequired = true) String imageKey;
+  private final @ModelField(targetType="String", isRequired = true) String longitude;
+  private final @ModelField(targetType="String", isRequired = true) String latitude;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
   private final @ModelField(targetType="ID") String teamTasksId;
@@ -54,6 +58,14 @@ public final class Task implements Model {
       return imageKey;
   }
   
+  public String getLongitude() {
+      return longitude;
+  }
+  
+  public String getLatitude() {
+      return latitude;
+  }
+  
   public Temporal.DateTime getCreatedAt() {
       return createdAt;
   }
@@ -66,12 +78,14 @@ public final class Task implements Model {
       return teamTasksId;
   }
   
-  private Task(String id, String title, String body, String state, String imageKey, String teamTasksId) {
+  private Task(String id, String title, String body, String state, String imageKey, String longitude, String latitude, String teamTasksId) {
     this.id = id;
     this.title = title;
     this.body = body;
     this.state = state;
     this.imageKey = imageKey;
+    this.longitude = longitude;
+    this.latitude = latitude;
     this.teamTasksId = teamTasksId;
   }
   
@@ -88,6 +102,8 @@ public final class Task implements Model {
               ObjectsCompat.equals(getBody(), task.getBody()) &&
               ObjectsCompat.equals(getState(), task.getState()) &&
               ObjectsCompat.equals(getImageKey(), task.getImageKey()) &&
+              ObjectsCompat.equals(getLongitude(), task.getLongitude()) &&
+              ObjectsCompat.equals(getLatitude(), task.getLatitude()) &&
               ObjectsCompat.equals(getCreatedAt(), task.getCreatedAt()) &&
               ObjectsCompat.equals(getUpdatedAt(), task.getUpdatedAt()) &&
               ObjectsCompat.equals(getTeamTasksId(), task.getTeamTasksId());
@@ -102,6 +118,8 @@ public final class Task implements Model {
       .append(getBody())
       .append(getState())
       .append(getImageKey())
+      .append(getLongitude())
+      .append(getLatitude())
       .append(getCreatedAt())
       .append(getUpdatedAt())
       .append(getTeamTasksId())
@@ -118,6 +136,8 @@ public final class Task implements Model {
       .append("body=" + String.valueOf(getBody()) + ", ")
       .append("state=" + String.valueOf(getState()) + ", ")
       .append("imageKey=" + String.valueOf(getImageKey()) + ", ")
+      .append("longitude=" + String.valueOf(getLongitude()) + ", ")
+      .append("latitude=" + String.valueOf(getLatitude()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()) + ", ")
       .append("teamTasksId=" + String.valueOf(getTeamTasksId()))
@@ -144,6 +164,8 @@ public final class Task implements Model {
       null,
       null,
       null,
+      null,
+      null,
       null
     );
   }
@@ -154,6 +176,8 @@ public final class Task implements Model {
       body,
       state,
       imageKey,
+      longitude,
+      latitude,
       teamTasksId);
   }
   public interface TitleStep {
@@ -172,7 +196,17 @@ public final class Task implements Model {
   
 
   public interface ImageKeyStep {
-    BuildStep imageKey(String imageKey);
+    LongitudeStep imageKey(String imageKey);
+  }
+  
+
+  public interface LongitudeStep {
+    LatitudeStep longitude(String longitude);
+  }
+  
+
+  public interface LatitudeStep {
+    BuildStep latitude(String latitude);
   }
   
 
@@ -183,12 +217,14 @@ public final class Task implements Model {
   }
   
 
-  public static class Builder implements TitleStep, BodyStep, StateStep, ImageKeyStep, BuildStep {
+  public static class Builder implements TitleStep, BodyStep, StateStep, ImageKeyStep, LongitudeStep, LatitudeStep, BuildStep {
     private String id;
     private String title;
     private String body;
     private String state;
     private String imageKey;
+    private String longitude;
+    private String latitude;
     private String teamTasksId;
     @Override
      public Task build() {
@@ -200,6 +236,8 @@ public final class Task implements Model {
           body,
           state,
           imageKey,
+          longitude,
+          latitude,
           teamTasksId);
     }
     
@@ -225,9 +263,23 @@ public final class Task implements Model {
     }
     
     @Override
-     public BuildStep imageKey(String imageKey) {
+     public LongitudeStep imageKey(String imageKey) {
         Objects.requireNonNull(imageKey);
         this.imageKey = imageKey;
+        return this;
+    }
+    
+    @Override
+     public LatitudeStep longitude(String longitude) {
+        Objects.requireNonNull(longitude);
+        this.longitude = longitude;
+        return this;
+    }
+    
+    @Override
+     public BuildStep latitude(String latitude) {
+        Objects.requireNonNull(latitude);
+        this.latitude = latitude;
         return this;
     }
     
@@ -249,12 +301,14 @@ public final class Task implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String title, String body, String state, String imageKey, String teamTasksId) {
+    private CopyOfBuilder(String id, String title, String body, String state, String imageKey, String longitude, String latitude, String teamTasksId) {
       super.id(id);
       super.title(title)
         .body(body)
         .state(state)
         .imageKey(imageKey)
+        .longitude(longitude)
+        .latitude(latitude)
         .teamTasksId(teamTasksId);
     }
     
@@ -276,6 +330,16 @@ public final class Task implements Model {
     @Override
      public CopyOfBuilder imageKey(String imageKey) {
       return (CopyOfBuilder) super.imageKey(imageKey);
+    }
+    
+    @Override
+     public CopyOfBuilder longitude(String longitude) {
+      return (CopyOfBuilder) super.longitude(longitude);
+    }
+    
+    @Override
+     public CopyOfBuilder latitude(String latitude) {
+      return (CopyOfBuilder) super.latitude(latitude);
     }
     
     @Override

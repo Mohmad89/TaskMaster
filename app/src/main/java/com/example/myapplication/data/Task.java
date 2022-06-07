@@ -14,12 +14,15 @@ public class Task {
     private String body;
     private String state;
     private String imageKey;
-
-    public Task(String title, String body, String state, String imageKey) {
+    private String longitude;
+    private String latitude;
+    public Task(String title, String body, String state, String imageKey, String longitude, String latitude) {
         this.title = title;
         this.body = body;
         this.state = state;
         this.imageKey = imageKey;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getTitle() {
@@ -60,5 +63,21 @@ public class Task {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 }

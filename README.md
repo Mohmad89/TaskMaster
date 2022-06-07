@@ -182,4 +182,12 @@ ___
 
 * The user can see the Image Task when he click on any task inside RecyclerView.
 
-![](screenshots/taskDetailsImage.png)
+![task](screenshots/taskDetailsImage.png)
+
+# Lab 39
+
+* in this lab when the user add new task the curretn location for him will be saved automaticlly then display it in the taskDetails Activity.
+
+## Task Details Activity
+
+![Location](screenshots/location.png)

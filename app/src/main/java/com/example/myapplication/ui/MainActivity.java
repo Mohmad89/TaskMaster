@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
         Amplify.API.query(ModelQuery.list(Task.class),
                 success -> {
                     for (Task task : success.getData()) {
-                        apiListArray.add(new com.example.myapplication.data.Task(task.getTitle(), task.getBody(), task.getState(), task.getImageKey()));
+                        apiListArray.add(new com.example.myapplication.data.Task(task.getTitle(), task.getBody(), task.getState(), task.getImageKey(), task.getLongitude(), task.getLatitude()));
                     }
                     Bundle bundle = new Bundle();
                     bundle.putString("true", "true");
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
                             Task.TEAM_TASKS_ID.eq(id[0])),
                             success -> {
                                 for (Task task : success.getData()){
-                                    arrayList.add(new com.example.myapplication.data.Task(task.getTitle(), task.getBody(), task.getState(), task.getImageKey()));
+                                    arrayList.add(new com.example.myapplication.data.Task(task.getTitle(), task.getBody(), task.getState(), task.getImageKey(), task.getLongitude(), task.getLatitude()));
                                 }
                                 Bundle bundle = new Bundle();
                                 bundle.putString("true", "true");
@@ -265,6 +265,8 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("description", array.get(position).getBody());
                 intent.putExtra("state", array.get(position).getState());
                 intent.putExtra("imageKey", array.get(position).getImageKey());
+                intent.putExtra("latitude", array.get(position).getLatitude());
+                intent.putExtra("longitude", array.get(position).getLongitude());
                 startActivity(intent);
             }
         });
