@@ -21,7 +21,7 @@ import com.squareup.picasso.Picasso;
 public class TaskDetails extends AppCompatActivity {
 
     private static final String TAG = TaskDetails.class.getSimpleName();
-    private TextView mTaskTitle, mTaskBody, mTaskState;
+    private TextView mTaskTitle, mTaskBody, mTaskState, mLongitude, mLatitude;
     private ImageView mTaskImage;
     private Handler handler;
 
@@ -36,12 +36,16 @@ public class TaskDetails extends AppCompatActivity {
         mTaskBody  = findViewById(R.id.text_task_body);
         mTaskState = findViewById(R.id.text_task_state);
         mTaskImage = findViewById(R.id.task_image);
+        mLongitude = findViewById(R.id.text_task_long);
+        mLatitude  = findViewById(R.id.text_task_lat);
 
         //Get Value from Intent
         Intent intent = getIntent();
         String title =  intent.getStringExtra("title");
         String description = intent.getStringExtra("description");
         String state = intent.getStringExtra("state");
+        String longValue = intent.getStringExtra("longitude");
+        String latValue = intent.getStringExtra("latitude");
 
         String key = intent.getStringExtra("imageKey");
         String url = "";
@@ -69,6 +73,8 @@ public class TaskDetails extends AppCompatActivity {
         mTaskTitle.setText(title);
         mTaskBody.setText(description);
         mTaskState.setText(state);
+        mLongitude.setText("Long : " + longValue);
+        mLatitude.setText("Lat  : " + latValue);
 
         // Add Back Button in ActionBar
         ActionBar actionBar = getSupportActionBar();
