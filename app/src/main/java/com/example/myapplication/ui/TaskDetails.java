@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,7 +17,15 @@ import android.widget.TextView;
 
 import com.amplifyframework.core.Amplify;
 import com.example.myapplication.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class TaskDetails extends AppCompatActivity {
 
@@ -24,6 +33,9 @@ public class TaskDetails extends AppCompatActivity {
     private TextView mTaskTitle, mTaskBody, mTaskState, mLongitude, mLatitude;
     private ImageView mTaskImage;
     private Handler handler;
+    private FloatingActionButton mSpeechButton;
+
+    private final MediaPlayer mp = new MediaPlayer();
 
 
     @Override
@@ -38,6 +50,7 @@ public class TaskDetails extends AppCompatActivity {
         mTaskImage = findViewById(R.id.task_image);
         mLongitude = findViewById(R.id.text_task_long);
         mLatitude  = findViewById(R.id.text_task_lat);
+        mSpeechButton = findViewById(R.id.floating_action_button);
 
         //Get Value from Intent
         Intent intent = getIntent();
@@ -76,6 +89,15 @@ public class TaskDetails extends AppCompatActivity {
         mLongitude.setText("Long : " + longValue);
         mLatitude.setText("Lat  : " + latValue);
 
+
+        mSpeechButton.setOnClickListener(view -> {
+            Amplify.Predictions.convertTextToSpeech(
+                    mTaskBody.getText().toString(),
+                    result -> playAudio(result.getAudioData()),
+                    error -> Log.e("MyAmplifyApp", "Conversion failed", error)
+            );
+        });
+
         // Add Back Button in ActionBar
         ActionBar actionBar = getSupportActionBar();
         // showing the back button in action bar
@@ -89,9 +111,23 @@ public class TaskDetails extends AppCompatActivity {
         });
     }
 
+    private void playAudio(InputStream data) {
+        File mp3File = new File(getCacheDir(), "audio.mp3");
 
-
-
+        try (OutputStream out = new FileOutputStream(mp3File)) {
+            byte[] buffer = new byte[8 * 1_024];
+            int bytesRead;
+            while ((bytesRead = data.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+            mp.reset();
+            mp.setOnPreparedListener(MediaPlayer::start);
+            mp.setDataSource(new FileInputStream(mp3File).getFD());
+            mp.prepareAsync();
+        } catch (IOException error) {
+            Log.e("MyAmplifyApp", "Error writing audio file", error);
+        }
+    }
 
 
 

@@ -14,8 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
-        <activity android:name=".ui.Map">
-        </activity>
         <activity android:name=".ui.Verification" />
         <activity android:name=".ui.SignUp" />
         <activity android:name=".ui.Login">
