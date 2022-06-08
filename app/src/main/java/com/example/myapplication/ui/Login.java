@@ -2,6 +2,7 @@ package com.example.myapplication.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,14 +13,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.analytics.pinpoint.AWSPinpointAnalyticsPlugin;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
+import com.amplifyframework.predictions.aws.AWSPredictionsPlugin;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 import com.example.myapplication.R;
 
-public class Login extends AppCompatActivity {
+public class Login extends AppCompatActivity{
 
     private static final String TAG = Login.class.getSimpleName();
 
@@ -43,14 +46,15 @@ public class Login extends AppCompatActivity {
 
         // Initialize Amplify
         try {
+            Amplify.addPlugin(new AWSPredictionsPlugin());
             Amplify.addPlugin(new AWSS3StoragePlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSDataStorePlugin());
+            Amplify.addPlugin(new AWSPinpointAnalyticsPlugin(getApplication()));
             Amplify.configure(getApplicationContext());
         } catch (AmplifyException error) {
         }
-
 
         mSignUpPage.setOnClickListener(view ->{
             Intent navigateToLoginPage = new Intent(this, SignUp.class);

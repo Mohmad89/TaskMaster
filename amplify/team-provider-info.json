@@ -39,7 +39,8 @@
     },
     "categories": {
       "auth": {
-        "taskmaster46d4e83f": {}
+        "taskmaster46d4e83f": {},
+        "true": {}
       }
     }
   }
