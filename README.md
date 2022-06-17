@@ -205,3 +205,30 @@ ___
 ![Task](screenshots/speech.png)
 
 ___
+
+# Lab 42 
+
+* in this lab i will to add typs of Adv to my Taskmaster App.
+
+## Banner Adv 
+
+![](screenshots/banner.png)
+
+## Interstitial Adv
+
+* When the user click on the top floating button.
+
+![](screenshots/Interstitial.png)
+
+## Rewarded  Adv
+
+* When the user click on the buttom floatiog button.
+* in this Adv When the user clicks the close button, the user should see their reward in a text field top of MainActivity.
+
+![](screenshots/rewardAdv.png)
+
+* After the user clicks the close button, will see their reward in top of MainActivity.
+
+![](screenshots/rewardFromAdv.png)
+
+___
