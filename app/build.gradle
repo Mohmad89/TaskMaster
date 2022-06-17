@@ -59,6 +59,8 @@ dependencies {
     // Google Play Services
     implementation 'com.google.android.gms:play-services-location:19.0.1'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-ads:21.0.0'
+
 
     implementation 'com.squareup.picasso:picasso:2.8'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
