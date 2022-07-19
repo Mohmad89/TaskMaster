@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,6 +26,7 @@ import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -88,6 +90,8 @@ public class AddTask extends AppCompatActivity implements OnMapReadyCallback {
 
     private double latitude;
     private double longitude;
+
+    private File file;
 
     private final LocationCallback mLocationCallback = new LocationCallback() {
 
@@ -170,10 +174,11 @@ public class AddTask extends AppCompatActivity implements OnMapReadyCallback {
         mAutoCompletedTeam = findViewById(R.id.team_spinner);
         mUploadBtn = findViewById(R.id.btn_upload);
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+//        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
 
         // method to get the location
-        getLastLocation();
+//        getLastLocation();
 
         adapterTeam = new ArrayAdapter<>(this, R.layout.list_item, teamItem);
         mAutoCompletedTeam.setAdapter(adapterTeam);
@@ -184,6 +189,8 @@ public class AddTask extends AppCompatActivity implements OnMapReadyCallback {
         mUploadBtn.setOnClickListener(view ->{
             imageUpload();
         });
+
+
 
         //state spinner
         mAutoCompletedState.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -268,15 +275,32 @@ public class AddTask extends AppCompatActivity implements OnMapReadyCallback {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
+    private void handleSendImage(Intent intent2) {
+        Uri imageUri =  intent2.getParcelableExtra(Intent.EXTRA_STREAM);
+        if (imageUri != null) {
+            try {
+                Bitmap bitmap = getBitmapFromUri(imageUri);
+                String tit;
+                if (mTaskName!=null)
+                {
+                    tit = mTaskName.getText().toString();
+                } else {
+                    tit="task";
+                }
+
+                file = new File(getApplicationContext().getFilesDir(), tit+".jpg");
+                OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                os.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return super.onOptionsItemSelected(item);
+
     }
+
+
 
     public void teamSpinner (ArrayList<String> array) {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array);
@@ -303,15 +327,82 @@ public class AddTask extends AppCompatActivity implements OnMapReadyCallback {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            case R.id.action_setting:
+                menuToSetting();
+                return true;
+            case R.id.action_logout:
+                logout();
+                return true;
+            case R.id.action_share:
+                shareImage();
+                return true;
+            case R.id.action_profile:
+                profile();
+        }
 
-    public void imageUpload() {
+        return true;
+    }
+
+    private void profile() {
+        startActivity(new Intent(getApplicationContext(), Profile.class));
+    }
+
+    private void shareImage() {
+        Intent intent2=getIntent();
+        String imageAction= intent2.getAction();
+        String imageType= intent2.getType();
+
+        if (Intent.ACTION_SEND.equals(imageAction) && imageType != null)
+        {
+            if (imageType.equals("image/*"))
+            {
+                handleSendImage(intent2);
+            }
+        }
+    }
+
+    private void logout() {
+        Amplify.Auth.signOut(
+                ()-> {
+                    startActivity(new Intent(AddTask.this, Login.class));
+                    authSession("logout");
+                    finish();
+                },
+                error ->{
+
+                });
+    }
+
+    private void authSession (String method){
+        Amplify.Auth.fetchAuthSession(
+                result ->{},
+                error->{});
+    }
+
+        public void imageUpload() {
         // Launches photo picker in single-select mode.
         // This means that the user can select one photo or video.
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
 
         startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    public void menuToSetting(){
+        Intent newIntent  = new Intent(getApplicationContext(), Setting.class);
+        startActivity(newIntent);
     }
 
     @Override
@@ -389,45 +480,45 @@ public class AddTask extends AppCompatActivity implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
     }
-    @SuppressLint("MissingPermission")
-    private void getLastLocation() {
-        // check if permissions are given
-        if (checkPermissions()) {
-
-            // check if location is enabled
-            if (isLocationEnabled()) {
-
-                // getting last
-                // location from
-                // FusedLocationClient
-                // object
-                mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<Location> task) {
-                        Location location = task.getResult();
-                        if (location == null) {
-                            requestNewLocationData();
-                        } else {
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-
-                            LatLng coordinate = new LatLng(latitude, longitude);
-
-                        }
-                    }
-                });
-            } else {
-                Toast.makeText(this, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
-
-            }
-        } else {
-            // if permissions aren't available,
-            // request for permissions
-            requestPermissions();
-        }
-
-
-    }
+//    @SuppressLint("MissingPermission")
+//    private void getLastLocation() {
+//        // check if permissions are given
+//        if (checkPermissions()) {
+//
+//            // check if location is enabled
+//            if (isLocationEnabled()) {
+//
+//                // getting last
+//                // location from
+//                // FusedLocationClient
+//                // object
+//                mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+//                    @Override
+//                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<Location> task) {
+//                        Location location = task.getResult();
+//                        if (location == null) {
+//                            requestNewLocationData();
+//                        } else {
+//                            latitude = location.getLatitude();
+//                            longitude = location.getLongitude();
+//
+//                            LatLng coordinate = new LatLng(latitude, longitude);
+//
+//                        }
+//                    }
+//                });
+//            } else {
+//                Toast.makeText(this, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
+//
+//            }
+//        } else {
+//            // if permissions aren't available,
+//            // request for permissions
+//            requestPermissions();
+//        }
+//
+//
+//    }
 
     @SuppressLint("MissingPermission")
     private void requestNewLocationData() {
@@ -470,23 +561,23 @@ public class AddTask extends AppCompatActivity implements OnMapReadyCallback {
 
     // method to check
     // if location is enabled
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-    }
+//    private boolean isLocationEnabled() {
+//        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+//                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+//    }
 
     // If everything is alright then
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == PERMISSION_ID) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLastLocation();
-            }
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//
+//        if (requestCode == PERMISSION_ID) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                getLastLocation();
+//            }
+//        }
+//    }
 
 
 }

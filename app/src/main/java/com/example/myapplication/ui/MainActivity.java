@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
     private InterstitialAd mInterstitialAd;
     private RewardedAd mRewardedAd;
 
-    // List<Task> arrayFromRoom;
 
     // Add Task Click To move For AddTask Page
     private final View.OnClickListener mAddTaskClick = new View.OnClickListener() {
@@ -133,15 +132,6 @@ public class MainActivity extends AppCompatActivity {
             mTextScore.setText("5");
         });
 
-
-//        List<com.example.myapplication.data.Task> arrayList = new ArrayList<>();
-//        arrayList.add(new com.example.myapplication.data.Task("Task1", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "new"));
-//        arrayList.add(new com.example.myapplication.data.Task ("Task2", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "assigned"));
-//        arrayList.add(new com.example.myapplication.data.Task ("Task3", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "In progress"));
-//        arrayList.add(new com.example.myapplication.data.Task ("Task4", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley", "complete"));
-
-//        arrayFromRoom = AppDatabase.getInstance(this).taskDao().getAllTasks();
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String teamTitle = sharedPreferences.getString("teamTitle", "All Team");
 
@@ -202,11 +192,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        menu.findItem(R.id.action_share).setVisible(false);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
@@ -217,9 +210,15 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout:
                 logout();
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            case R.id.action_profile:
+                profile();
+
         }
+        return true;
+    }
+
+    private void profile() {
+        startActivity(new Intent(getApplicationContext(), Profile.class));
     }
 
     private void logout() {
