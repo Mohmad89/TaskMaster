@@ -14,4 +14,14 @@
         android:title="Logout"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/share"
+        android:title="share"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_profile"
+        android:title="Profile"
+        app:showAsAction="never"/>
+
 </menu>
